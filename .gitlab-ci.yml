@@ -1,0 +1,15 @@
+stages:
+  - scan
+
+trivy_scan:
+  stage: scan
+  image:
+    name: aquasec/trivy:latest
+    entrypoint: [""]
+  services: 
+    - docker:dind
+  script:
+    - trivy image --scanners vuln --format json -o trivy-out-report.json --insecure "$CI_REGISTRY_IMAGE:latest"
+  artifacts:
+    paths:
+      - trivy-out-report.json
